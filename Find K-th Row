@@ -1,0 +1,33 @@
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+    public static int findRowK(int[][] mat) {
+        // Write your code here.
+        int n = mat.length;
+
+        // Check each row and column for the required conditions
+        for (int k = 0; k <= n-1; k++) {
+            boolean allZeroes = true;
+            boolean allOnes = true;
+
+            for (int i = 0; i <= n-1; i++) {
+                if (mat[k][i] != 0 && i != k) {
+                    allZeroes = false;
+                    break;
+                }
+            }
+
+            for (int i = 0; i <= n-1; i++) {
+                if (mat[i][k] != 1 && i != k) {
+                    allOnes = false;
+                    break;
+                }
+            }
+
+            if (allZeroes && allOnes) {
+                return k;
+            }
+        }
+        return -1;
+    }
+}
