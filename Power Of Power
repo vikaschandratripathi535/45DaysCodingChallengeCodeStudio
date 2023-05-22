@@ -1,0 +1,42 @@
+public class Solution 
+{
+
+    static int powerModM(int x, int y, int M) 
+    {
+
+        // Initialize result.
+        long pow = 1;
+
+        // Update x if it is more than or equal to M.
+        long x1 = x % M;
+
+        while (y > 0) 
+        {
+
+            // If y is odd, multiply x with result.
+            if (y % 2 == 1) 
+            {
+                pow = (pow * 1l * x1) % M;
+            }
+
+            // Divide y by 2.
+            y = y / 2;
+            x1 = (x1 * 1l * x1) % M;
+        }
+        return (int) pow;
+    }
+
+    static int powerOfPower(int A, int B, int C, int M) 
+    {
+        int res, ans;
+
+        // Calculate B ^ C (mod M - 1).
+        res = powerModM(B, C, M - 1);
+
+        // Calculate A ^ res ( mod M ).
+        ans = powerModM(A, res, M);
+        return ans;
+
+    }
+
+}
