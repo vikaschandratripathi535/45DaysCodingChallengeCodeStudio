@@ -1,0 +1,60 @@
+import java.util.Arrays;
+import java.util.HashMap;
+
+public class Solution 
+{
+
+    public static int[] findLangford(int n) 
+    {
+        
+        if(n % 4 == 1 || n % 4 == 2) 
+        {
+            return new int[] {-1};
+        }
+        
+        int[] ans = new int[2 * n];
+        
+        findLangfordHelper(ans, n);
+        
+        return ans;
+        
+    } 
+
+    public static boolean findLangfordHelper(int[] ans, int n) 
+    {
+
+        if(n == 0) 
+        {
+            return true;
+        }
+        
+        for(int i = 0; i < ans.length - n - 1; i++) 
+        {
+            
+            // If empty slot
+            if(ans[i] == 0 && ans[i + n + 1] == 0) 
+            {
+                
+                // Fill slot
+                ans[i] = n;
+                ans[i + n + 1] = n;
+                
+                // Recursively call to fill remaining elements.
+                if(findLangfordHelper(ans, n - 1)) 
+                {
+                    return true;
+                }
+                
+                // Undo
+                ans[i] = 0;
+                ans[i + n + 1] = 0;
+
+            }
+        } 
+
+        return false;
+
+    }
+
+
+}
