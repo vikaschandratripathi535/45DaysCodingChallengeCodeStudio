@@ -1,0 +1,66 @@
+/*
+    Time Complexity: O(M * logM)
+    Space Complexity: O(1)
+
+    Where M is the number of rows.
+*/
+
+import java.util.Arrays;
+
+public class Solution {
+    public static long footballGame(int[] vacantSeats, int m, int n) {
+    
+        Arrays.sort(vacantSeats);
+        long ans = 0;
+        long c = 1;
+        
+        for (int i = vacantSeats.length - 1; i >= 0; i--) {
+            if (n <= 0 || i == 0) {
+                break;
+            }
+            
+            long dif = vacantSeats[i] - vacantSeats[i - 1];
+            
+            if (n >= dif * c) {
+                ans += sum(vacantSeats[i - 1] + 1, dif) * c;
+            } else {
+                long x = n / c;
+                long max = vacantSeats[i - 1] + dif;
+
+                if (x > 0) {
+                    ans += sum(max - x + 1, x) * c;
+                    n -= x * c;
+                    max -= x;
+                }
+                ans += max * n;
+                n = 0;
+            }
+            n -= dif * c;
+            c++;
+        }
+        
+        if (n > 0) {
+            c--;
+            long x = n / c;
+            long max = vacantSeats[0];
+
+            if (x > 0) {
+                ans += sum(max - x + 1, x) * c;
+                n -= x * c;
+                max -= x;
+            }
+
+            ans += max * n;
+
+        }
+        
+        return ans;
+     
+    }
+    public static long sum(long a, long n) {
+
+        long a2 = a * 2;
+        long ans = (n * (a2 + n - 1)) / 2;
+        return ans;
+    }
+}
