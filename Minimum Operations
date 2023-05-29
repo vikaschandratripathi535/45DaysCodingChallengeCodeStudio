@@ -1,0 +1,39 @@
+/*
+   Time Complexity: O(N)
+   Space Complexity: O(N)
+   
+   Where 'N' is the length of the array.
+*/
+
+import java.util.HashMap;
+import java.util.Set;
+
+public class Solution {
+
+	public static int minimumOperation(int[] arr, int n) {
+		// Unordered Map to store the frequency of elements.
+		HashMap<Integer, Integer> map = new HashMap<>();
+
+		// Insert all elements in HashMap.
+		for (int i = 0; i < n; i++) {
+			if (map.containsKey(arr[i])) {
+				map.put(arr[i], map.get(arr[i]) + 1);
+			} 
+			else {
+				map.put(arr[i], 1);
+			}
+		}
+
+		// Variable to store maximum frequency.
+		int maxFreq = 0;
+		Set<Integer> s = map.keySet();
+
+		for (int i : s) {
+			if (maxFreq < map.get(i)) {
+				maxFreq = map.get(i);
+			}
+		}
+
+		return n - maxFreq;
+	}
+}
