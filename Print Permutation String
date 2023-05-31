@@ -1,0 +1,61 @@
+/*
+
+    Time Complexity: O(N*N!).
+    Space Complexity: O(N).
+
+    Where N is the length of string .
+
+*/
+
+import java.util.List;
+import java.util.ArrayList;
+
+public class Solution {
+
+    public static List<String> findPermutations(String s) {
+        // Convert string to character array.
+        char[] a = s.toCharArray();
+
+        // Declaring a List of string to store all the possible permutations of the string.
+        List<String> ans = new ArrayList<>();
+
+        // Calling the user defined function which stores all the possible permutations of the string in the List ans.
+        findPermutationsHelper(a, 0, a.length - 1, ans);
+
+        return ans;
+    }
+
+    private static void findPermutationsHelper(char[] a, int i, int j, List<String> ans) {
+        if (i >= j) {
+            // Storing the string in the List ans.
+            String permutation = "";
+
+            for (int k = 0; k < a.length; k++) {
+                permutation += (a[k]);
+            }
+
+            // for printing in next line
+            ans.add(permutation);
+            return;
+        }
+
+        // Fixing a character at index i and then swapping with characters from index i to j and by this way building up permutation strings.
+        for (int k = i; k <= j; k++) {
+
+            swap(a, i, k);
+
+            findPermutationsHelper(a, i + 1, j, ans);
+
+            swap(a, i, k);
+
+        }
+    }
+
+    // Swaping two alphabets in a string.
+    private static void swap(char[] a, int i, int j) {
+        char te = a[i];
+        a[i] = a[j];
+        a[j] = te;
+    }
+
+}
