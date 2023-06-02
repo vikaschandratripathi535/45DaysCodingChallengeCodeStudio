@@ -1,0 +1,41 @@
+/*
+	Time complexity: O(N) 
+	Space Complexity: O(N)
+	 
+	Where 'N' is the number of nodes in the binary tree.
+*/
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class Solution {
+	public static void mirrorTree(BinaryTreeNode root) {
+		if (root == null) {
+			return;
+		}
+
+		Queue<BinaryTreeNode> q = new LinkedList<>();
+		q.add(root);
+
+		// Do BFS. While doing BFS, keep swapping left and right children.
+		while (!q.isEmpty()) {
+			// Pop top node from queue.
+			BinaryTreeNode curr = q.peek();
+			q.poll();
+
+			// Swap left child with right child.
+			BinaryTreeNode temp;
+			temp = curr.left;
+			curr.left = curr.right;
+			curr.right = temp;
+
+			// Push left and right children.
+			if (curr.left != null) {	
+				q.add(curr.left);
+			}
+			if (curr.right != null) {
+				q.add(curr.right);
+			}
+		}
+	}
+}
