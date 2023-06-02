@@ -1,0 +1,32 @@
+import java.util.*;
+class solution{
+	public static int champernowneDigit(int n) {
+		// write your code here
+		int number = 0;
+        int digitCount = 0;
+
+        while (digitCount < n) {
+            number++;
+            digitCount += countDigits(number);
+        }
+
+        int excessDigits = digitCount - n;
+        int divisor = (int) Math.pow(10, excessDigits);
+        int remainingDigits = number / divisor;
+
+        return remainingDigits % 10;
+    }
+
+    public static int countDigits(int number) {
+        if (number == 0) {
+            return 1;
+        }
+
+        int count = 0;
+        while (number != 0) {
+            number /= 10;
+            count++;
+        }
+        return count;
+    }
+}
