@@ -1,0 +1,32 @@
+/*
+    Time Complexity: O(N)
+    Space Complexity: O(N)
+
+    Where N is the number of integers in the array.
+*/
+
+import java.util.HashMap;
+
+public class Solution
+{
+    public static int maximumDistance(int[] arr)
+    {
+        HashMap<Integer, Integer> map = new HashMap();
+        int maxDist = 0;
+
+        for(int i = 0; i < arr.length; i++)
+        {
+            if(map.containsKey(arr[i]))
+            {
+                maxDist = Math.max(maxDist, i - map.get(arr[i]));
+            }
+            else
+            {
+                map.put(arr[i], i);
+            }
+        }
+        
+        return maxDist;
+    }
+
+}
