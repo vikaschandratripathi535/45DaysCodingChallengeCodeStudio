@@ -1,0 +1,44 @@
+/*
+    Time Complexity: O(N + M)
+    Space Complexity: O(N)
+
+    Where N and M are the lengths of the ARR1 and ARR2 respectively.
+*/
+
+import java.util.HashMap;
+import java.util.Iterator;
+
+public class Solution {
+    public static boolean checkSubset(int[] arr1, int[] arr2, int n, int m) {
+        // If arr2 is larger, it can't be subset.
+        if (m > n) {
+            return false;
+        }
+        // Map to store the frequency of each elements of array arr1.
+        HashMap<Integer, Integer> map = new HashMap<>();
+        // Store the element of arr1 with its frequency in map.
+        for (int i = 0; i < n; i++) {
+            if (map.containsKey(arr1[i])) {
+                map.put(arr1[i], map.get(arr1[i]) + 1);
+            } 
+            else {
+                map.put(arr1[i], 1);
+            }
+        }
+        for (int i = 0; i < m; i++) {
+            // If arr2[i] is not in map then return false.
+            if (!map.containsKey(arr2[i])) {
+                return false;
+            }
+            // Else decrease its frequency by 1.
+            else {
+                map.put(arr2[i], map.get(arr2[i]) - 1);
+                // If at any point, frequency becomes negative then return false.
+                if (map.get(arr2[i]) < 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
