@@ -1,0 +1,67 @@
+/********************************************************
+
+    Following is the class structure of the Node class:
+    
+    class Node
+    {
+        public:
+            int data;
+            Node next;
+            Node(int data)
+            {
+                this.data = data;
+                this.next = null;
+            }
+    };
+
+********************************************************/
+
+/* 
+    Time complexity: O(N)
+    Space complexity: O(N)
+    
+    Where 'N' is the number of nodes in the linked list.
+*/
+
+import java.util.*;
+
+public class Solution {
+    public static int countConnected(Node head, int[] arr, int m) {
+        // To store values of arr.
+        Map<Integer, Integer> mp = new HashMap<>();
+        for(int i = 0; i < m; ++i) {
+            int val = (mp.containsKey(arr[i])?mp.get(arr[i]):0);
+            mp.put(arr[i], val+1);
+        }
+        
+        // To traverse the linked list.
+        Node temp = head;
+        
+        // To check for connected components.
+        boolean check = false;
+        
+        // To store the count.
+        int count = 0;
+        
+        while(temp != null) {
+            
+            // Check if present.
+            if(mp.containsKey(temp.data)) {
+
+                // Check conditions.
+                if(!check){
+                    ++count;
+                }
+                
+                check = true;
+            }
+            else
+                check = false;
+            
+            temp = temp.next;
+        }
+        
+        return count;
+    }
+}
+
