@@ -1,0 +1,61 @@
+/****************************************************************
+
+Following is the class structure of the Node class:
+
+class LinkedListNode {
+    public int data;
+    public LinkedListNode next;
+
+    LinkedListNode(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+*****************************************************************/
+/*
+   Time Complexity: O(N + M)
+   Space Complexity: O(1)
+
+   where N and M are the numbers of nodes in the first Linked List and second Linked List.
+*/
+
+public class Solution {
+
+    public static LinkedListNode mergeInBetween(int x, int y, LinkedListNode head1, LinkedListNode head2) {
+
+        LinkedListNode prev1 = head1;
+        LinkedListNode prev2 = head1;
+
+        int i = 0;
+
+        // Set prev1 to the node at index x - 1
+        while(i < x - 1) {
+            prev1 = prev1.next;
+            i++;
+        }
+
+        i = 0;
+
+        // Set prev2 at index y
+        while(i < y) {
+            prev2 = prev2.next;
+            i++;
+        }
+
+        LinkedListNode tail = head2;
+
+        // Find the last node of the second Linked List
+        while (tail.next != null) {
+            tail = tail.next;
+        }
+
+        // Create a link between prev1 and the head of the second Linked List
+        prev1.next = head2;
+
+        // Create a link between the tail of the second linked list with the prev2.next
+        tail.next = prev2.next;
+
+        return head1;
+    }
+}
