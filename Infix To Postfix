@@ -1,0 +1,91 @@
+
+/*
+    Time Complexity : O(N)
+    Space Complexity : O(N)
+    
+    where N is the length of the expression.  
+*/
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
+
+public class Solution 
+{
+	public static boolean isOperator(char ch)
+	{
+		if(ch - 'a' >= 0 && ch - 'a' <= 25)
+		{
+			return true;
+		}
+		else if(ch - '0' >= 0 && ch - '0' <= 9)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+    public static String infixToPostfix(String exp)
+    {
+		String ans = "";
+		Stack<Character> s = new Stack<Character>();
+
+		// Precedence of the operators 
+		Map<Character,Integer> precedence = new HashMap<Character,Integer>();
+
+		precedence.put('^',3);
+		precedence.put('*',2);
+		precedence.put('/',2);
+		precedence.put('+',1);
+		precedence.put('-',1);
+		precedence.put(')',0);
+		precedence.put('(',0);
+
+		for(int i = 0; i < exp.length(); i++)
+		{
+			if(isOperator(exp.charAt(i)) == true)
+			{
+				ans += exp.charAt(i);
+			}
+			else if(exp.charAt(i) == ')')
+			{
+
+				// Remove till the last opening
+				while(s.size() != 0 && s.peek() != '(')
+				{
+					ans += s.peek();
+					s.pop();
+				}
+				if(s.size() != 0)
+				{
+					s.pop();
+				}
+			}
+			else if(exp.charAt(i) == '(')
+			{
+				s.push(exp.charAt(i));
+			}
+			else
+			{
+
+				// Remove lower precedence operators 
+				while((s.size() != 0) && (precedence.get(s.peek()) >= precedence.get(exp.charAt(i))))
+				{
+					ans += s.peek();
+					s.pop();
+				}
+				s.push(exp.charAt(i));
+			}
+		}
+		while(s.size() != 0)
+		{
+			ans += s.peek();
+			s.pop();
+		}
+		return ans;		        
+    }
+
+}
