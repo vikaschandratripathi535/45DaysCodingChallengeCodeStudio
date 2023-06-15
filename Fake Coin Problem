@@ -1,0 +1,40 @@
+/*
+Time Complexity: O(LogN)
+
+Space Complexity: O(1)
+
+Where 'N' is the number of elements in the vector 'sum'.
+*/
+public class Solution {
+    public static int FakeCoin(int []sum){
+        int n = sum.length;
+        int l = 0, r = n - 1;
+
+        //Binary searching on range [0,N-1].
+        while (l < r)
+        {
+            int m = (l + r) / 2;
+
+            //If 'sum[m + 1] == sum[m]' fake coin is at index 'm+1'.
+            if (sum[m + 1] == sum[m])
+            {
+                r = m + 1;
+                break;
+            }
+
+            //If 'sum[r] - sum[m] < r-m' fake coin is in range [m+1,r].
+            if (sum[r] - sum[m] < r - m)
+            {
+                l = m + 1;
+            }
+
+            //Fake coin is in range [l,m].
+            else
+            {
+                r = m;
+            }
+        }
+
+        return r;
+    }
+}
