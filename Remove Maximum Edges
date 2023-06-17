@@ -1,0 +1,150 @@
+/*
+    Time Complexity: O(N+(M*log(N)))
+    Space Complexity: O(N)
+
+    Where 'N' is the number of nodes and 'M' is the number of edges in the graph.
+*/
+
+import java.util.ArrayList;
+
+public class Solution {
+
+    // Function for finding parent of a node using path compression.
+    private static int findParent(int x, ArrayList < Integer > parent) {
+        if (parent.get(x) == x) {
+            return x;
+        }
+
+        parent.set(x, findParent(parent.get(x), parent));
+        return parent.get(x);
+    }
+
+    /* 
+    	Function for performing union of two components 
+        using union by size.
+    */
+    private static void unionSet(int parentY, int parentX, ArrayList < Integer > parent, ArrayList < Integer > rank) {
+        if (rank.get(parentY) > rank.get(parentX)) {
+            // Swap.
+            int temp = parentX;
+            parentX = parentY;
+            parentY = temp;
+        }
+
+        parent.set(parentY, parentX);
+
+        rank.set(parentX, rank.get(parentX) + rank.get(parentY));
+    }
+
+    public static int removeMaxEdges(int n, int m, ArrayList < ArrayList < Integer >> edges) {
+        // For storing the parent nodes.
+        ArrayList < Integer > parentOne = new ArrayList < Integer > (n + 1);
+        ArrayList < Integer > parentTwo = new ArrayList < Integer > (n + 1);
+
+        // For storing the size of each component.
+        ArrayList < Integer > sizeOne = new ArrayList < Integer > (n + 1);
+        ArrayList < Integer > sizeTwo = new ArrayList < Integer > (n + 1);
+
+        // Adjacency lists for storing type 1 and type 2 edges.
+        ArrayList < Integer > [] playerOne = new ArrayList[n + 1];
+        ArrayList < Integer > [] playerTwo = new ArrayList[n + 1];
+
+        // Intialize the parent arrays.
+        for (int i = 0; i <= n; i++) {
+            parentOne.add(i);
+            parentTwo.add(i);
+
+            sizeOne.add(1);
+            sizeTwo.add(1);
+
+            playerOne[i] = new ArrayList < Integer > ();
+            playerTwo[i] = new ArrayList < Integer > ();
+        }
+
+        int count = 0;
+
+        // Iterate through the edge list.
+        for (int i = 0; i < m; i++) {
+
+            int x, y, type;
+            type = edges.get(i).get(0);
+            x = edges.get(i).get(1);
+            y = edges.get(i).get(2);
+
+            // For type 1 edge.
+            if (type == 1) {
+                playerOne[x].add(y);
+                playerOne[y].add(x);
+            }
+
+            // For type 2 edge.
+            else if (type == 2) {
+                playerTwo[x].add(y);
+                playerTwo[y].add(x);
+            }
+
+            // For type 3 edge.
+            else {
+                // Find the parent nodes.
+                int parentX = findParent(x, parentOne);
+                int parentY = findParent(y, parentOne);
+
+                /* 
+                	Merge the components if the parent 
+                    nodes are not equal.
+                */
+                if (parentX != parentY) {
+                    unionSet(parentY, parentX, parentOne, sizeOne);
+                    unionSet(parentY, parentX, parentTwo, sizeTwo);
+                    count++;
+                }
+            }
+        }
+        int countOne = 0;
+
+        // Iterate through adjacency list of type 1 edges.
+        for (int i = 1; i <= n; i++) {
+            for (int j: playerOne[i]) {
+                int x = i, y = j;
+
+                // Find the parent nodes.
+                int parentX = findParent(x, parentOne), parentY = findParent(y, parentOne);
+
+                // Merge the components if parent nodes are not equal.
+                if (parentX != parentY) {
+                    unionSet(parentY, parentX, parentOne, sizeOne);
+                    countOne++;
+                }
+            }
+        }
+
+        int countTwo = 0;
+
+        // Iterate through the adjacency list of type 2 edges.
+        for (int i = 1; i <= n; i++) {
+            for (int j: playerTwo[i]) {
+                int x = i, y = j;
+
+                // Find the parent nodes.
+                int parentX = findParent(x, parentTwo), parentY = findParent(y, parentTwo);
+
+                /*
+                	Merge the components if the parent 
+                    nodes are not equal.
+                */
+                if (parentX != parentY) {
+                    unionSet(parentY, parentX, parentTwo, sizeTwo);
+                    countTwo++;
+                }
+            }
+        }
+
+        // Check the count of edges for both player 1 and player 2.
+        if (countOne + count != n - 1 || countTwo + count != n - 1) {
+            return -1;
+        }
+
+        // Return the number of removed edges.
+        return (m - count - countOne - countTwo);
+    }
+}
