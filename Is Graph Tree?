@@ -1,0 +1,93 @@
+/*
+  	Time Complexity  : O(N + M)
+  	Space Complexity : O(N + M)
+
+    Where N is the total number of nodes and M is the total number of edges in the graph.
+*/
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class Solution 
+{
+	// BFS function to detect cycle in graph
+	public static boolean bfs(ArrayList<ArrayList<Integer>> graph, boolean [] visited) 
+	{
+		int n = graph.size();
+		int[] parent = new int[n];
+
+		for (int i = 0; i < n; i++) 
+		{
+			parent[i] = -1;
+		}
+
+		Queue<Integer> q = new LinkedList<>();
+
+		q.add(0);
+		visited[0] = true;
+
+		while (q.size() > 0) 
+		{
+			int curNode = q.remove();
+
+			for (int i = 0; i < graph.get(curNode).size(); i++) 
+			{
+				int neighbour = graph.get(curNode).get(i);
+				if (visited[neighbour] == true) 
+				{
+					if (parent[curNode] != neighbour) 
+					{
+						return true;
+					}
+				} else 
+				{
+					parent[neighbour] = curNode;
+					visited[neighbour] = true;
+					q.add(neighbour);
+				}
+			}
+		}
+		return false;
+	}
+
+	public static boolean isGraphTree(int n, ArrayList<ArrayList<Integer>> edgeList) 
+	{
+		ArrayList<ArrayList<Integer>> graph = new ArrayList<ArrayList<Integer>>(n);
+
+		for (int i = 0; i < n; i++) 
+		{
+			graph.add(new ArrayList<Integer>());
+		}
+
+		boolean [] visited = new boolean[n];
+
+		boolean answer = true;
+
+		// Build adjacency list graph
+		for (int i = 0; i < edgeList.size(); i++) 
+		{
+			int u = edgeList.get(i).get(0), v = edgeList.get(i).get(1);
+			graph.get(u).add(v);
+			graph.get(v).add(u);
+		}
+
+		// Check for presence of cycle using bfs
+		if (bfs(graph, visited) == true) 
+		{
+			answer = false;
+		}
+
+		// Check for multiple connected components
+		for (int node = 0; node < n; node++) 
+		{
+			if (visited[node] == false) 
+			{
+				answer = false;
+				break;
+			}
+		}
+
+		return answer;
+	}
+}
