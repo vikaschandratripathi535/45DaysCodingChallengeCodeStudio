@@ -1,0 +1,33 @@
+/*
+    Time Complexity: O(N)
+    Space Complexity: O(N)
+
+    Where 'N' is the given number.
+*/
+
+public class Solution 
+{
+	public static int[] count(int N)
+    {
+		int dp[] = new int[N+1];
+		for(int i=0; i<= N; i++)
+		{
+			dp[i]=0;
+		}
+		for (int i = 1; i <= N; ++i)
+		{
+			// Updating according to the parity of the number 'i'.
+			int x = i >> 1;
+			if (i % 2 == 0)
+			{
+				dp[i] = dp[x];
+			}
+			else
+			{
+				dp[i] = dp[x] + 1;
+			}
+		}
+		return dp;
+	}
+
+}
